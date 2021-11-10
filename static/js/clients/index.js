@@ -35,44 +35,50 @@ function listClients(){
         url: '/client-list/',
         type: 'GET',
         success: function (response){
-            console.log(response.data[0]['pk'])
             $('#clientTable tbody').html("");
-            for (let i = 0; i < response.data.length; i++) {
-                let row = '<tr>';
-                row += '<td>' + response.data[i]['pk'] +'</td>'
-                row += '<td>' + response.data[i]['fields']['type_document'] + '</td>'
-                row += '<td>' + response.data[i]['fields']['num_doc'] +'</td>'
-                row += 
-                    '<td>' +
-                        response.data[i]['fields']['first_name'] +
-                        ' ' +
-                        response.data[i]['fields']['last_name'] +
-                    '</td>'
-                
-                row += '<td>'+ response.data[i]['fields']['name_consultory']+ '</td>'
-                row += '<td>'+ response.data[i]['fields']['email']+ '</td>'
-                row += '<td>'+ response.data[i]['fields']['direction']+ '</td>'
-                row += '<td>'+ response.data[i]['fields']['phone']+ '</td>'
-                row += 
-                    '<td>'+
-                    `<button 
-                        class="btn btn-primary btn-sm"
-                        onclick="openEditClient('/client-update/${response.data[i]['pk']}')"
-                    >
-                        <i class="fas fa-pencil-alt"></i>
-                    </button>
-                        
-                    <button 
-                        class="btn btn-danger btn-sm"
-                        onclick="openDeleteClient('/client-update/${response.data[i]['pk']}')"
-                    >
-                        <i class="far fa-times-circle"></i>
-                    </button>`
-                    '</td>'
-                
-                row += '</tr>'
-                $('#clientTable tbody').append(row);
+            if(response.data.length > 0 ){
+                $('#messageError').append("");
+                for (let i = 0; i < response.data.length; i++) {
+                    let row = '<tr>';
+                    row += '<td>' + response.data[i]['pk'] +'</td>'
+                    row += '<td>' + response.data[i]['fields']['type_document'] + '</td>'
+                    row += '<td>' + response.data[i]['fields']['num_doc'] +'</td>'
+                    row += 
+                        '<td>' +
+                            response.data[i]['fields']['first_name'] +
+                            ' ' +
+                            response.data[i]['fields']['last_name'] +
+                        '</td>'
+                    
+                    row += '<td>'+ response.data[i]['fields']['name_consultory']+ '</td>'
+                    row += '<td>'+ response.data[i]['fields']['email']+ '</td>'
+                    row += '<td>'+ response.data[i]['fields']['direction']+ '</td>'
+                    row += '<td>'+ response.data[i]['fields']['phone']+ '</td>'
+                    row += 
+                        '<td>'+
+                        `<button 
+                            class="btn btn-primary btn-sm"
+                            onclick="openEditClient('/client-update/${response.data[i]['pk']}')"
+                        >
+                            <i class="fas fa-pencil-alt"></i>
+                        </button>
+                            
+                        <button 
+                            class="btn btn-danger btn-sm"
+                            onclick="openDeleteClient('/client-delete/${response.data[i]['pk']}')"
+                        >
+                            <i class="far fa-times-circle"></i>
+                        </button>`
+                        '</td>'
+                    
+                    row += '</tr>'
+                    $('#clientTable tbody').append(row);
+                }
+            }else{
+                $('#clientTable').remove();
+                $('#messageError').append("NO HAY DATOS");
             }
+            
         }, 
         error: function (error){
             console.log(error)
@@ -88,6 +94,7 @@ function createClient(){
         success: function (response){
             closeModalCreate();
             listClients();
+            notification(response.message, 'success');
         },
         error: function(error){
             console.log(error)
@@ -105,6 +112,26 @@ function updateClient(pk){
         success: function (response){
             closeModalEdit();
             listClients();
+            notification(response.message, 'success');
+        },
+        error: function(error){
+            console.log(error)
+            // Verificar validaciones
+            // Mostrar los errores en el modal
+        }
+    });
+}
+function deleteClient(pk){
+    $.ajax({
+        data: {
+            'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
+        },
+        url: '/client-delete/'+pk,
+        type: 'POST',
+        success: function (response){
+            closeModalDelete();
+            listClients();
+            notification(response.message, 'success');
         },
         error: function(error){
             console.log(error)
@@ -118,3 +145,22 @@ function updateClient(pk){
 $(document).ready(function (){
     listClients();
 });
+
+function notification(message, type){
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
+      })
+
+      Toast.fire({
+        icon: type,
+        title: message
+      })
+}

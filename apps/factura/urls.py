@@ -5,7 +5,7 @@ from django.urls import path
 from .views import (
     HomeView, ClientListTemplate,
     ClientListView, ClientCreateView,
-    ClientUpdateView
+    ClientUpdateView, ClientDeleteView
 )
 
 urlpatterns = [
@@ -14,4 +14,5 @@ urlpatterns = [
     path('client-list/', ClientListView.as_view(), name='list_client_ajax'),
     path('client-create/', ClientCreateView.as_view(), name='create_client'),
     path('client-update/<int:pk>', ClientUpdateView.as_view(), name='update_client'),
+    path('client-delete/<int:pk>', ClientDeleteView.as_view(), name='delete_client'),
 ]
