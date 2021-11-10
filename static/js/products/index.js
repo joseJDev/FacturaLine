@@ -1,80 +1,71 @@
 // Modales
-function openCreateClient(url){
-    $('#createClient').load(url,function(){
+function openCreateProduct(url){
+    $('#createProduct').load(url,function(){
         $(this).modal('show'); 
     });
 }
 
-function openEditClient(url){
-    $('#editClient').load(url,function(){
+function openEditProduct(url){
+    $('#editProduct').load(url,function(){
         $(this).modal('show'); 
     });
 }
 
-function openDeleteClient(url){
-    $('#deleteClient').load(url,function(){
+function openDeleteProduct(url){
+    $('#deleteProduct').load(url,function(){
         $(this).modal('show'); 
     });
 }
 
 function closeModalCreate(){
-    $('#createClient').modal('hide');
+    $('#createProduct').modal('hide');
 }
 function closeModalEdit(){
-    $('#editClient').modal('hide');
+    $('#editProduct').modal('hide');
 }
 function closeModalDelete(){
-    $('#deleteClient').modal('hide');
+    $('#deleteProduct').modal('hide');
 }
 
-// METODOS
-function listClients(){
+
+function listProducts(){
     console.log('Ready')
     $.ajax({
-        url: '/client-list/',
+        url: '/product-list/',
         type: 'GET',
         success: function (response){
-            $('#clientTable tbody').html("");
+            $('#productTable tbody').html("");
             if(response.data.length > 0 ){
                 $('#messageError').append("");
                 for (let i = 0; i < response.data.length; i++) {
                     let row = '<tr>';
                     row += '<td>' + response.data[i]['pk'] +'</td>'
-                    row += '<td>' + response.data[i]['fields']['type_document'] + '</td>'
-                    row += '<td>' + response.data[i]['fields']['num_doc'] +'</td>'
-                    row += 
-                        '<td>' +
-                            response.data[i]['fields']['first_name'] +
-                            ' ' +
-                            response.data[i]['fields']['last_name'] +
-                        '</td>'
-                    
-                    row += '<td>'+ response.data[i]['fields']['name_consultory']+ '</td>'
-                    row += '<td>'+ response.data[i]['fields']['email']+ '</td>'
-                    row += '<td>'+ response.data[i]['fields']['direction']+ '</td>'
-                    row += '<td>'+ response.data[i]['fields']['phone']+ '</td>'
+                    row += '<td>' + response.data[i]['fields']['code'] + '</td>'
+                    row += '<td>' + response.data[i]['fields']['name'] +'</td>'
+                    row += '<td>'+ response.data[i]['fields']['value']+ '</td>'
+                    row += '<td>'+ response.data[i]['fields']['description']+ '</td>'
                     row += 
                         '<td>'+
                         `<button 
                             class="btn btn-primary btn-sm"
-                            onclick="openEditClient('/client-update/${response.data[i]['pk']}')"
+                            onclick="openEditProduct('/product-edit/${response.data[i]['pk']}')"
                         >
                             <i class="fas fa-pencil-alt"></i>
                         </button>
                             
                         <button 
                             class="btn btn-danger btn-sm"
-                            onclick="openDeleteClient('/client-delete/${response.data[i]['pk']}')"
+                            onclick="openDeleteProduct('/product-delete/${response.data[i]['pk']}')"
                         >
                             <i class="far fa-times-circle"></i>
                         </button>`
                         '</td>'
                     
                     row += '</tr>'
-                    $('#clientTable tbody').append(row);
+                    $('#productTable tbody').append(row);
                 }
             }else{
-                $('#clientTable').remove();
+                $('#productTable').remove();
                 $('#messageError').append("NO HAY DATOS");
             }
             
@@ -85,14 +76,15 @@ function listClients(){
     });
 }
 
-function createClient(){
+
+function createProduct(){
     $.ajax({
-        data: $('#formClient').serialize(),
-        url: '/client-create/',
+        data: $('#formProduct').serialize(),
+        url: '/product-create/',
         type: 'POST',
         success: function (response){
             closeModalCreate();
-            listClients();
+            listProducts();
             notification(response.message, 'success');
         },
         error: function(error){
@@ -103,14 +95,14 @@ function createClient(){
     });
 }
 
-function updateClient(pk){
+function editProduct(pk){
     $.ajax({
-        data: $('#formClient').serialize(),
-        url: '/client-update/'+pk,
+        data: $('#formProduct').serialize(),
+        url: '/product-edit/'+pk,
         type: 'POST',
         success: function (response){
             closeModalEdit();
-            listClients();
+            listProducts();
             notification(response.message, 'success');
         },
         error: function(error){
@@ -120,16 +112,17 @@ function updateClient(pk){
         }
     });
 }
-function deleteClient(pk){
+
+function deleteProduct(pk){
     $.ajax({
         data: {
             'csrfmiddlewaretoken': $("[name='csrfmiddlewaretoken']").val()
         },
-        url: '/client-delete/'+pk,
+        url: '/product-delete/'+pk,
         type: 'POST',
         success: function (response){
             closeModalDelete();
-            listClients();
+            listProducts();
             notification(response.message, 'success');
         },
         error: function(error){
@@ -140,8 +133,6 @@ function deleteClient(pk){
     });
 }
 
-
 $(document).ready(function (){
-    listClients();
+    listProducts();
 });
-

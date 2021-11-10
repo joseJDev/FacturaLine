@@ -76,7 +76,7 @@
                             <i class="fas fa-user"></i>
                             Clientes
                         </a>
-                        <a class="collapse-item" href="cards.html">
+                        <a class="collapse-item" href="{% url 'factura:list_product' %}">
                             <i class="fas fa-clinic-medical"></i>
                             Productos
                         </a>
@@ -335,7 +335,8 @@
     <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
     
     <!-- Toast -->
-   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{% static 'js/index.js' %}"></script>
     
 
     {% block extrajs %}
