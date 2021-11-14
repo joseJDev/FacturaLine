@@ -109,3 +109,22 @@ class ClientUpdateView(View):
 
     def get_object(self, pk):
         return Client.objects.filter(id=pk).first()
+
+
+class ClientDeleteView(View):
+    template_name = "clients/delete_client.html"
+    form_class = ClientForm
+
+    def get(self, request, *args, **kwargs):
+        client = self.get_object(kwargs.get('pk'))
+        return render(request, self.template_name, {'client': client})
+
+    def post(self, request, *args, **kwargs):
+        client = self.get_object(kwargs.get('pk'))
+        client.delete()
+        response = JsonResponse({'message': 'Cliente Eliminado exitosamente'})
+        response.status_code = 200
+        return response
+        
+    def get_object(self, pk):
+        return Client.objects.filter(id=pk).first()
