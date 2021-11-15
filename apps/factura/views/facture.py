@@ -80,13 +80,11 @@ class GenerateQuotes(View):
             cleaned_data = form.cleaned_data
             
             # Calcular Balance
-            print('ANTES: ',cleaned_data)
             balance = cleaned_data.get('product').value - cleaned_data.get('payment') 
             
             # Guardar informacion de la factura
             cleaned_data['balance'] = balance
             cleaned_data['total_payment'] = cleaned_data.get('product').value
-            print('DESPUES: ',cleaned_data)
 
             facture = FactureLine.objects.create(**cleaned_data)
 
