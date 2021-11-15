@@ -23,6 +23,9 @@ import json
 from core.utils.generate_quotes import generate_facture_quotes
 from core.utils.generate_pdf import render_to_pdf
 
+# Config
+from django.conf import settings
+
 class FactureView(View):
     template_name = "facture/facture.html"
 
@@ -91,9 +94,11 @@ class GenerateQuotes(View):
             # Generar cuotas
             final_quotes = generate_facture_quotes(facture)
 
-            # Generar PDF
-            response = render_to_pdf('facture/pdf/quotes.html', {"quotes": final_quotes})
-            response['Content-Disposition'] = 'attachment; filename=' + 'pdfjorge.pdf'
+            # URL para descargar PDF
+            url = settings.DOMAIN+"facture-gen-pdf/?facture={}".format(facture.id)
+
+            response = JsonResponse({'url': url})
+            response.status_code = 200
             return response
             
         else:
@@ -104,4 +109,21 @@ class GenerateQuotes(View):
             response.status_code = 400
             return response
         
+class GeneratePDF(View):
+    def get(self, request, *args, **kwargs):
+        facture_id = request.GET.get('facture', None)
+        facture = FactureLine.objects.filter(id=facture_id).first()
 
+        if not facture:
+            return redirect('factura:facture')
+
+        final_quotes = QuotaFacture.objects.filter(facture__id = facture_id)
+
+        # Generar PDF
+        filename = "{}_{}_cuotas.pdf".format(
+            facture.client.first_name,
+            facture.client.last_name,
+        )
+        response = render_to_pdf('facture/pdf/quotes.html', {"quotes": final_quotes})
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response

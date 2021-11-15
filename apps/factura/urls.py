@@ -9,7 +9,9 @@ from .views import (
     ProductListTemplate, ProductListView,
     ProductCreateView, ProductUpdateView,
     ProductDeleteView, FactureView,
-    GetInfoClientView, GenerateQuotes
+    GetInfoClientView, GenerateQuotes,
+    GeneratePDF, ReportClientTemplate,
+    GetReportView
 
 )
 
@@ -34,5 +36,10 @@ urlpatterns = [
     path('facture/', FactureView.as_view(), name='facture'),
     path('facture-get-client/', GetInfoClientView.as_view(), name='facture_get_client'),
     path('facture-gen-quotes/', GenerateQuotes.as_view(), name='facture_gen_quotes'),
+    path('facture-gen-pdf/', GeneratePDF.as_view(), name='facture_gen_pdf'),
+    
+    # Reportes 
+    path('report/', ReportClientTemplate.as_view(), name='report'),
+    path('get-report/', GetReportView.as_view(), name='get_report'),
 
 ]
