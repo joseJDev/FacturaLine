@@ -68,7 +68,7 @@
                                 <div class="col-6">
                                     <label for="recipient-name" class="text-secondary text-center select2">Producto:</label>
                                     <select class="js-example-basic-single form-control" name="state" id="product">
-                                        <option value="AL" selected disabled>Selecione una opcion</option>
+                                        <option value="select" selected disabled>Selecione una opcion</option>
                                         {% for product in products %}
                                             <option value="{{ product.id }}">{{ product.name }} - {{ product.value|intcomma  }}</option>
                                         {% endfor %}
@@ -77,7 +77,7 @@
                                 <div class="col-6">
                                     <label for="recipient-name" class="text-secondary text-center select2">Cuotas:</label>
                                     <select class="js-example-basic-single form-control" name="state" id="quote">
-                                        <option value="AL" selected disabled>Selecione una opcion</option>
+                                        <option value="select" selected disabled>Selecione una opcion</option>
                                         {% for q in quotes %}
                                             <option value="{{ q }}">{{ q }}</option>
                                         {% endfor %}

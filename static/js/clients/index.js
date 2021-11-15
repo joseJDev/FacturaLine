@@ -29,7 +29,6 @@ function closeModalDelete(){
 
 // METODOS
 function listClients(){
-    console.log('Ready')
     $.ajax({
         url: '/client-list/',
         type: 'GET',
