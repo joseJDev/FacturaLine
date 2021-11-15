@@ -22,10 +22,11 @@ class FactureLine(FacturaModel):
         on_delete=models.DO_NOTHING
     )
 
-    payment        = models.IntegerField()
-    balance        = models.IntegerField()
-    total_payment  = models.IntegerField()
-    interest       = models.IntegerField()
+    payment        = models.IntegerField(null=True, blank=True)
+    balance        = models.IntegerField(null=True, blank=True)
+    total_payment  = models.IntegerField(null=True, blank=True)
+    interest       = models.IntegerField(null=True, blank=True)
+    discount       = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = 'facture_line'
@@ -50,6 +51,8 @@ class QuotaFacture(FacturaModel):
         related_name='quote_facture',
         on_delete=models.DO_NOTHING
     )
+    iva = models.IntegerField()
+    subtotal = models.IntegerField()
 
     class Meta:
         db_table            = 'quota_facture'

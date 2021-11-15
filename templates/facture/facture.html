@@ -1,0 +1,126 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+    FacturaLine | Factura
+{% endblock title %}
+
+{% block content %}
+    <!-- Page Heading -->
+
+<h1 class="h3 mb-2 text-gray-800">Facturas</h1>
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">
+            <div class="card mb-2">
+                <div class="card-title p-1 text-center"></div>
+                <div class="card-body">
+                    <form class="">
+                        <div class="row">
+                            {% csrf_token %}
+                            <div class="input-group col-3">
+                                <input type="text" id="searchClient" class="form-control bg-light border-0 small" placeholder="Buscar Cliente"
+                                aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="hidden" id="idClient" name="name" class="form-control" id="recipient-name" disabled>
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" onclick="getInfoUser()" type="button">
+                                        <i class="fas fa-search fa-sm"></i>
+                                    </button>
+                                </div>
+                                <div id="errorClient"></div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row mt-5"><h4 class="text-center">Informacion Cliente</h4></div>
+                            <div class="row mt-4">
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Tipo Doc:</label>
+                                    <input type="text" id="typeDoc" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Nombre Completo:</label>
+                                    <input type="text" id="completeName" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Nombre Consultorio:</label>
+                                    <input type="text" id="nameConsultory" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Email:</label>
+                                    <input type="text" id="email" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Telefono:</label>
+                                    <input type="text" id="phone" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Direccion:</label>
+                                    <input type="text" id="addres" name="name" class="form-control" id="recipient-name" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="row mt-5"><h4 class="text-center">Informacion Factura</h4></div>
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <label for="recipient-name" class="text-secondary text-center select2">Producto:</label>
+                                    <select class="js-example-basic-single form-control" name="state" id="product">
+                                        <option value="AL" selected disabled>Selecione una opcion</option>
+                                        {% for product in products %}
+                                            <option value="{{ product.id }}">{{ product.name }} - {{ product.value|intcomma  }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label for="recipient-name" class="text-secondary text-center select2">Cuotas:</label>
+                                    <select class="js-example-basic-single form-control" name="state" id="quote">
+                                        <option value="AL" selected disabled>Selecione una opcion</option>
+                                        {% for q in quotes %}
+                                            <option value="{{ q }}">{{ q }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col-6">
+                                    <label for="recipient-name" class="text-secondary text-center">Abono:</label>
+                                    <input type="number" name="payment" class="form-control" id="payment">
+                                </div>
+                                <div class="col-6">
+                                    <label for="recipient-name" class="text-secondary text-center">Descuento:</label>
+                                    <input type="number" name="discount" class="form-control" id="discount">
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-6 col-md-3">
+                                    <button type="button" onclick="generateQuotes()" class="btn btn-primary btn-lg btn-block generate-facture">Factura</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-success btn-lg btn-block generate-facture">Recibo</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-info btn-lg btn-block generate-facture">Cuotas</button>
+                                </div>
+                                <div class="col-6 col-md-3">
+                                    <button type="button" class="btn btn-warning btn-lg btn-block generate-facture">Cotizacion</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </h6>
+    </div>
+    <div class="card-body">
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block extrajs %}
+<script src="{% static 'js/facture/index.js' %}"></script>
+{% endblock extrajs %}

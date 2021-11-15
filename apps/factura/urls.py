@@ -8,7 +8,8 @@ from .views import (
     ClientUpdateView, ClientDeleteView,
     ProductListTemplate, ProductListView,
     ProductCreateView, ProductUpdateView,
-    ProductDeleteView
+    ProductDeleteView, FactureView,
+    GetInfoClientView, GenerateQuotes
 
 )
 
@@ -28,4 +29,10 @@ urlpatterns = [
     path('product-create/', ProductCreateView.as_view(), name='create_product'),
     path('product-edit/<int:pk>', ProductUpdateView.as_view(), name='edit_product'),
     path('product-delete/<int:pk>', ProductDeleteView.as_view(), name='delete_product'),
+
+    # Factura
+    path('facture/', FactureView.as_view(), name='facture'),
+    path('facture-get-client/', GetInfoClientView.as_view(), name='facture_get_client'),
+    path('facture-gen-quotes/', GenerateQuotes.as_view(), name='facture_gen_quotes'),
+
 ]
