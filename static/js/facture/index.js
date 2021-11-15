@@ -43,12 +43,12 @@ function generateQuotes(){
         url: '/facture-gen-quotes/',
         type: 'POST',
         success: function (response){
-            var a = document.createElement('a');
-            var url = window.URL.createObjectURL(response)
-            a.href = url;
-            a.download = 'your_pdf_name.pdf';
-            a.click();
-            window.URL.revokeObjectURL(url);
+            url = response['url'];
+            let win =  window.open(url, '_blank');
+            win.focus();
+
+            // Limpiar inputs
+            clearValuesInput();
         },
         error: function(error){
             viewError(error.responseJSON['message'], true)
@@ -76,7 +76,10 @@ function clearValuesInput(){
     $('#phone').val("");    
     $('#addres').val("");
     $('#idClient').val("");
-
+    $('#product').val(null).trigger('change');
+    $('#quote').val(null).trigger('change');
+    $('#payment').val("");
+    $('#discount').val("");
 }
 
 function viewError(message, view){
