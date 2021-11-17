@@ -65,16 +65,74 @@
                         <div class="container">
                             <div class="row mt-5"><h4 class="text-center">Informacion Factura</h4></div>
                             <div class="row mt-4">
-                                <div class="col-6">
+                                <div class="col-4">
                                     <label for="recipient-name" class="text-secondary text-center select2">Producto:</label>
                                     <select class="js-example-basic-single form-control" name="state" id="product">
                                         <option value="select" selected disabled>Selecione una opcion</option>
                                         {% for product in products %}
-                                            <option value="{{ product.id }}">{{ product.name }} - {{ product.value|intcomma  }}</option>
+                                        <option value="{{ product.id }}">{{ product.name }} - {{ product.value|intcomma  }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Cantidad:</label>
+                                    <input type="number" name="amount" class="form-control" id="amount">
+                                </div>
+                                <div class="col-4 mt-4">
+                                    <button type="button" onclick="addProduct()" class="text-center btn btn-primary btn-circle btn-sm">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="text-center text-primary mt-5">Productos Agregados</p>
+                            <table class="table">
+                                <thead class="text-dark">
+                                  <tr>
+                                    <th scope="col" class="text-center">Cantidad</th>
+                                    <th scope="col" class="text-center">Producto</th>
+                                    <th scope="col" class="text-center">Valor</th>
+                                    <th scope="col" class="text-center">X</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <th scope="row" class="text-center">1</th>
+                                    <td class="text-center">Mark</td>
+                                    <td class="text-center">Otto</td>
+                                    <td class="text-center">
+                                        <i
+                                            style="cursor: pointer;"
+                                            title="Eliminar Producto"
+                                            class="fas fa-times text-danger"></i>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                      <th scope="row" class="text-center">2</th>
+                                      <td class="text-center">Jacob</td>
+                                    <td class="text-center">Thornton</td>
+                                    <td class="text-center">
+                                        <i
+                                            style="cursor: pointer;"
+                                            title="Eliminar Producto"
+                                            class="fas fa-times text-danger"></i>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <hr class="mt-5" style="color: black;">
+                              <div class="d-flex flex-row-reverse bd-highlight">
+                                  <h4 class="p-2 bd-highlight"><span class="text-dark"><b>Valor a pagar: </b></span> <span class="text-secondary">$8.000.000</span></h4>
+                              </div>
+                            <div class="row mt-5">
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Abono:</label>
+                                    <input type="number" name="payment" class="form-control" id="payment">
+                                </div>
+                                <div class="col-4">
+                                    <label for="recipient-name" class="text-secondary text-center">Descuento:</label>
+                                    <input type="number" name="discount" class="form-control" id="discount">
+                                </div>
+                                <div class="col-4">
                                     <label for="recipient-name" class="text-secondary text-center select2">Cuotas:</label>
                                     <select class="js-example-basic-single form-control" name="state" id="quote">
                                         <option value="select" selected disabled>Selecione una opcion</option>
@@ -82,16 +140,6 @@
                                             <option value="{{ q }}">{{ q }}</option>
                                         {% endfor %}
                                     </select>
-                                </div>
-                            </div>
-                            <div class="row mt-4">
-                                <div class="col-6">
-                                    <label for="recipient-name" class="text-secondary text-center">Abono:</label>
-                                    <input type="number" name="payment" class="form-control" id="payment">
-                                </div>
-                                <div class="col-6">
-                                    <label for="recipient-name" class="text-secondary text-center">Descuento:</label>
-                                    <input type="number" name="discount" class="form-control" id="discount">
                                 </div>
                             </div>
                             <div class="row mt-5">

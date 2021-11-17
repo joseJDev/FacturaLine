@@ -104,3 +104,43 @@ function viewButtons(view){
         $('.generate-facture').hide();
     }
 }
+
+function getStorage(){
+    const productsArray = localStorage.getItem('products')
+    
+    if(productsArray){
+        let newArray = JSON.parse(productsArray);
+        return newArray
+    }else{
+        return []
+    }
+}
+
+function addProduct(){
+    //datos
+    let product = $('#product').val()
+    let amount = $('#amount').val()
+    
+    // Json
+    const productObj = {
+        product, // product: product
+        amount
+    }
+
+    // Actualizar Storage
+    const productsStorage = getStorage();
+
+    let productsArray = [...productsStorage, productObj];
+    
+    // Conver
+    const jsonString = JSON.stringify(productsArray);
+    
+    //Guardar localstorage
+    localStorage.setItem("products", jsonString)
+
+    // listar tabla
+
+    // Calcular valores
+    
+    // Limpiar inputs
+}
