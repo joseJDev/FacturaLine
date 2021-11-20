@@ -4,6 +4,9 @@ $(document).ready(function (){
     });
     
     viewButtons(false)
+
+    listTableProducts();
+    calculateTotal();
 });
 
 
@@ -43,12 +46,12 @@ function generateQuotes(){
         url: '/facture-gen-quotes/',
         type: 'POST',
         success: function (response){
-            var a = document.createElement('a');
-            var url = window.URL.createObjectURL(response)
-            a.href = url;
-            a.download = 'your_pdf_name.pdf';
-            a.click();
-            window.URL.revokeObjectURL(url);
+            url = response['url'];
+            let win =  window.open(url, '_blank');
+            win.focus();
+
+            // Limpiar inputs
+            clearValuesInput();
         },
         error: function(error){
             viewError(error.responseJSON['message'], true)
@@ -76,7 +79,10 @@ function clearValuesInput(){
     $('#phone').val("");    
     $('#addres').val("");
     $('#idClient').val("");
-
+    $('#product').val(null).trigger('change');
+    $('#quote').val(null).trigger('change');
+    $('#payment').val("");
+    $('#discount').val("");
 }
 
 function viewError(message, view){
@@ -101,3 +107,165 @@ function viewButtons(view){
         $('.generate-facture').hide();
     }
 }
+
+function getStorage(){
+    const productsArray = localStorage.getItem('products')
+    
+    if(productsArray){
+        let newArray = JSON.parse(productsArray);
+        return newArray
+    }else{
+        return []
+    }
+}
+
+function addProduct(){
+    //datos
+    let nameProduct = $('#product option:selected').attr("nameP");
+    let valueProduct = $('#product option:selected').attr("valueP");
+    let amount = $('#amount').val()
+    
+    // Json
+    let total = parseInt(valueProduct) * parseInt(amount);
+    const productObj = {
+        id: uuid.v4(), 
+        nameProduct,
+        valueProduct,
+        amount,
+        total
+    }
+
+    // Actualizar Storage
+    const productsStorage = getStorage();
+
+    let productsArray = [...productsStorage, productObj];
+    
+    // Actualizar Storage
+    updateStorage(productsArray)
+
+    // listar tabla
+    listTableProducts()
+
+    // Calcular valores
+    calculateTotal()
+    
+    // Limpiar inputs
+}
+
+function updateStorage(data){
+    // Conversion de array a string
+    const jsonString = JSON.stringify(data);
+        
+    //Guardar localstorage
+    localStorage.setItem("products", jsonString)
+}
+
+function listTableProducts(){
+    $('#listProducts tbody').empty();
+
+    const products = getStorage();
+    products.forEach(product => {
+        let row = '<tr>';
+        row += '<td class="text-center">' + product.amount +'</td>'
+        row += '<td class="text-center">' + product.nameProduct +'</td>'
+        row += '<td class="text-center"> $' + numeral(product.valueProduct).format() +'</td>'
+        row += '<td class="text-center"> $' + numeral(product.amount * product.valueProduct).format() +'</td>'
+        row += 
+            `<td class="text-center">
+                <button class="btn" type="button"
+                    onclick="deleteProduct('${product.id}')"
+                >
+                    <i
+                        title="Eliminar Producto"
+                        class="fas fa-times text-danger">
+                    </i>
+                </button>
+            </td>`
+        row += '</tr>'
+        $('#listProducts tbody').append(row);
+    });
+}
+
+function calculateTotal(){
+    // Extraer productos del localstorage
+    const products = getStorage();
+
+    // Calculo total
+    let total = 0;
+    products.forEach(product => {
+        total += product.total;
+    });
+    
+    // Enviar al localStorage
+    let stringTotal = total.toString();
+    
+    localStorage.setItem('totalProducts', stringTotal)
+    
+    // Convertir a miles
+    let totalString = numeral(total).format();    
+    
+    // Mostrar valor en el DOM
+    $('#totalPayment').empty();
+
+    const spanText = $(`
+        <span class="text-dark">
+            <b>Total: </b>
+        </span>
+    `);
+
+    const spanTotal = $(`
+        <span class="text-secondary">
+            <b>$${totalString}</b>
+        </span>
+    `);
+    
+    $('#totalPayment').append(spanText);
+    $('#totalPayment').append(spanTotal);
+}
+
+function deleteProduct(id){
+    console.log("Entra")
+    console.log(id)
+    // Traer datos del Storage
+    const products = getStorage();
+
+    // Eliminar
+    const result = products.filter( product => product.id != id );
+    
+    // Actualizar Storage
+    updateStorage(result);
+
+    // Listar productos
+    listTableProducts();
+
+    // Actualizar calculo
+    calculateTotal();
+}
+
+$( "#payment" ).keyup(function() {
+    let payment = parseInt($( "#payment" ).val());
+    let totalProducts = parseInt(localStorage.getItem('totalProducts')); 
+    let balance = totalProducts - payment
+    let balanceString = balance.toString()
+    let balanceStrFormat = numeral(balance).format()
+    localStorage.setItem('totalBalance', balanceString)
+    
+    // Mostrar valor en el DOM
+    $('#balance').empty();
+    
+
+    const spanText = $(`
+        <span class="text-dark">
+            <b>Total: </b>
+        </span>
+    `);
+
+    const spanTotal = $(`
+        <span class="text-secondary">
+            <b>$${balanceStrFormat}</b>
+        </span>
+    `);
+
+    $('#balance').append(spanText);
+    $('#balance').append(spanTotal);
+  });

@@ -5,6 +5,14 @@ from apps.factura.models import QuotaFacture
 
 
 def generate_facture_quotes(facture):
+    print('Entra')
+    # Borrar cuotas existentes 
+    exist_quotes = QuotaFacture.objects.filter(
+        facture__id = facture.id
+    )
+    print(exist_quotes)
+    exist_quotes.delete()
+
     # Valor del producto
     product_value = facture.product.value
     iva = product_value * 0.19

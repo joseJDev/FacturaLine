@@ -85,6 +85,10 @@
                             <i class="far fa-newspaper"></i>
                             Facturas
                         </a>
+                        <a class="collapse-item" href="{% url 'factura:report' %}">
+                            <i class="fas fa-clipboard-list"></i>
+                            Reportes
+                        </a>
                     </div>
                 </div>
             </li>
@@ -157,10 +161,17 @@
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
+                                <i class="fas fa-shopping-cart"></i>
                                 <!-- Counter - Alerts -->
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-shopping-cart fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Coronas II $900.000
+                                </a>
+                            </div>
                         </li>
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -342,6 +353,11 @@
     <!-- SELECT 2 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js" integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- NumeralJS -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
+
+    <!-- UUID -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js" integrity="sha512-UNM1njAgOFUa74Z0bADwAq8gbTcqZC8Ej4xPSzpnh0l6KMevwvkBvbldF9uR++qKeJ+MOZHRjV1HZjoRvjDfNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {% block extrajs %}
     {% endblock extrajs %}
 
